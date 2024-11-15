@@ -34,3 +34,6 @@ class Solution(object):
             index += step
 
         return ''.join(L)
+
+
+

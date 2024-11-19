@@ -33,7 +33,7 @@ class Solution(object):
             # It's really misleading way you think of this. Even it works, it's not efficient.
             index += step
 
-        return ''.join(L)
+        return ''.join(L) 
 
 
 

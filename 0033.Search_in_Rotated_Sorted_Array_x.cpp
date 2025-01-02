@@ -1,4 +1,4 @@
-#0ms Binary Search
+//0ms Binary Search
 
 class Solution {
 public:

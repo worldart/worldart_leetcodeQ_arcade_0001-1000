@@ -1,33 +1,25 @@
-//
-class Solution 
-{
+//57.69% RT
+class Solution {
 public:
-    string countAndSay(int n) 
-    {
-        // [1] only 3 repetitions of any digit is possible, thus,
-        //     we can list all possible boundaries between blocks
-        map<string,string> sep = {{"12", "1|2"}, {"21", "2|1"}, {"13", "1|3"},
-                                  {"31", "3|1"}, {"23", "2|3"}, {"32", "3|2"}};
-        
-        string say = "1";
-        string block;
-        
-        // [2] on each iteration:
-        //     - first, place separators between blocks
-        //     - second, split using separators and build new saying
-        for (int i = 0; i < n-1; ++i)
+    string countAndSay(int n) { // Function to generate the nth term of the count-and-say sequence
+        string ans = "1"; // Initialize the first term of the sequence as "1"
+        for(int i = 2;i <= n;i++) // Loop to generate subsequent terms of the sequence up to nth term
         {
-            for(auto [src, dst]: sep) 
-                say = regex_replace(say, regex(src), dst);
-            
-            istringstream ss(say);
-            string new_say = "";
-            new_say.reserve(4500);
-            while(getline(ss, block, '|')) 
-                new_say += to_string(block.size()) + block[0];
-            say = new_say;
+            string temp = ""; // Temporary string to hold the current term being generated
+            int j = 0; // Initialize index for traversing the current term
+            while(j < ans.size()) // Loop to iterate through the current term
+            {
+                int cnt = 0; // Counter to keep track of the number of consecutive digits
+                char ch = ans[j]; // Current character being examined
+                while(j <= ans.size() && ans[j]==ch) // Loop to count the number of consecutive occurrences of the current character
+                {
+                    cnt++; // Increment the count
+                    j++; // Move to the next character
+                }
+                temp += to_string(cnt)+ ch; // Append the count followed by the character to the temporary string
+            }
+            ans = temp; // Update the current term with the newly generated term
         }
-        
-        return say;
+        return ans; // Return the nth term of the count-and-say sequence
     }
 };

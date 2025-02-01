@@ -1,4 +1,4 @@
-#93.30%
+#93.30%RT
 
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:

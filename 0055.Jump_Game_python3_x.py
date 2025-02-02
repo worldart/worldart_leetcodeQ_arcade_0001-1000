@@ -1,4 +1,4 @@
-//97.51%RT
+#97.51%RT
 
 
 class Solution:

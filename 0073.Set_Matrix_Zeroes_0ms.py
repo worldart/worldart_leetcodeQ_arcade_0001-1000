@@ -1,4 +1,4 @@
-#0ma
+#0ms
 
 
 class Solution(object):

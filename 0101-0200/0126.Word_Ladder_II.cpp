@@ -285,6 +285,105 @@ public:
 
 
 
+
+
+
+
+//11ms
+
+
+
+class Solution
+{
+#define vll vector<int>
+#define vs vector<string>
+#define pb push_back
+
+vector<vector<string>> ans;
+void dfs(string &beginWord, string word, vector<string> &v, unordered_map<string, int> &mp)
+{
+
+    if(word == beginWord)
+    {
+        reverse(v.begin(), v.end());
+        ans.pb(v);
+        reverse(v.begin(), v.end());
+        return;
+    }
+    for(int i = 0; i<word.size(); i++)
+    {
+        char ch = word[i];
+        int step = mp[word];
+        for(char c = 'a'; c<='z'; c++)
+        {
+            word[i] = c;
+            if(mp.contains(word) && mp[word] == step -1)
+            {
+                v.pb(word);
+                dfs(beginWord, word, v, mp);
+                v.pop_back();
+            }
+        }
+        word[i] = ch;
+    }
+}
+
+public:
+    vector<vector < string>> findLadders(string beginWord, string endWord, vector<string> &wordList) 
+    {
+        unordered_set<string> w(wordList.begin(), wordList.end());
+        unordered_map<string, int> mp;
+        queue<string> q;
+
+        q.push(beginWord);
+        mp[beginWord] = 1;
+        w.erase(beginWord);
+        int len = -1;
+
+        while(!q.empty())
+        {
+            string f = q.front();
+            int k = mp[f];
+            if(f==endWord)
+            {
+                len = k;
+                break;
+            }
+            for(int i = 0; i<f.size(); i++)
+            {
+                char ch = f[i];
+                for(char c = 'a'; c<='z'; c++)
+                {
+                    f[i] = c;
+                    if(w.contains(f))
+                    {
+                        q.push(f);
+                        mp[f] = k+1;
+                        w.erase(f);
+                    }
+                }
+                f[i] = ch;
+            }
+            q.pop();
+        }
+
+        vector<string> v;
+        if(mp.contains(endWord))
+        {
+            v.pb(endWord);
+            dfs(beginWord, endWord, v, mp);
+        }
+
+        return ans;
+
+    }
+};
+
+
+
+
+
+
 //25ms
 
 

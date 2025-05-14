@@ -177,3 +177,44 @@ public:
         }
     }
 };
+
+
+
+
+//32ms
+
+
+
+
+class Solution {
+    bool isPalindrome(const string& s, int start, int end) {
+    while (start < end) {
+        if (s[start] != s[end]) return false;
+        ++start;
+        --end;
+    }
+    return true;
+}
+public:
+    void backtrack_palinpar(string& s, int startIdx, vector<vector<string>>& result, vector<string>& path) {
+    if (startIdx >= s.size()) {
+        result.push_back(path);
+        return;
+    }
+    // [startIdx, i]就是要截取的子串
+    for (int i = startIdx; i < s.size(); ++i) {
+        if (isPalindrome(s, startIdx, i)) {
+            path.push_back(s.substr(startIdx, i - startIdx + 1));
+            backtrack_palinpar(s, i + 1, result, path);
+            path.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> partition(string s) {
+    vector<vector<string>> result;
+    vector<string> path;
+    backtrack_palinpar(s, 0, result, path);
+    return result;
+}
+};

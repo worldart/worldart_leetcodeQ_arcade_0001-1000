@@ -1,0 +1,168 @@
+//
+
+
+
+
+// #[derive(PartialEq, Eq, Clone, Debug)]
+// pub struct Node {
+//     pub val: i32,
+//     pub neighbors: Vec<Rc<RefCell<Node>>>,
+// }
+
+// impl Node {
+//     pub fn new(val: i32) -> Self {
+//         Self {
+//             val,
+//             neighbors: Vec::new(),
+//         }
+//     }
+// }
+
+use crate::util::Node;
+use std::{cell::RefCell, rc::Rc};
+
+pub struct CloneGraph;
+impl CloneGraph {
+    pub fn clone_graph(node: Option<Rc<RefCell<Node>>>) -> Option<Rc<RefCell<Node>>> {
+        let node = node?;
+
+        // Get the starting ptr
+        let start = Rc::as_ptr(&node);
+        let mut que = std::collections::VecDeque::from([node]);
+        let mut map = std::collections::HashMap::new();
+
+        // Perform BFS traversal
+        while let Some(node) = que.pop_front() {
+            let new_node = map
+                .entry(Rc::as_ptr(&node))
+                .or_insert_with(|| Rc::new(RefCell::new(Node::new(node.borrow().val))))
+                .clone();
+
+            for neighbor in &node.borrow().neighbors {
+                let new_neighbor = map.entry(Rc::as_ptr(neighbor)).or_insert_with(|| {
+                    que.push_back(neighbor.clone());
+                    Rc::new(RefCell::new(Node::new(neighbor.borrow().val)))
+                });
+                new_node.borrow_mut().neighbors.push(new_neighbor.clone());
+            }
+        }
+
+        map.get(&start).cloned()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{
+        cell::RefCell,
+        collections::{HashMap, HashSet},
+        rc::Rc,
+    };
+
+    // Helper function to build a graph from an adjacency list
+    fn build_graph(adj_list: Vec<Vec<i32>>) -> Option<Rc<RefCell<Node>>> {
+        if adj_list.is_empty() {
+            return None;
+        }
+
+        // Create all nodes
+        let mut nodes: HashMap<i32, Rc<RefCell<Node>>> = HashMap::new();
+        // Build the nodes using "1-indexed" values from the problem statement,
+        // otherwise we'd use the normal enumerate.
+        for i in 1..=adj_list.len() {
+            nodes.insert(i as i32, Rc::new(RefCell::new(Node::new(i as i32))));
+        }
+
+        // Connect neighbors
+        for (i, neighbors) in adj_list.iter().enumerate() {
+            let node = nodes.get(&(i as i32 + 1)).unwrap();
+            for &neighbor_val in neighbors {
+                let neighbor = nodes.get(&neighbor_val).unwrap();
+                node.borrow_mut().neighbors.push(neighbor.clone());
+            }
+        }
+
+        // Return the starting node
+        nodes.get(&1).cloned()
+    }
+
+    // Helper function to check if two graphs are identical and ensure deep copy
+    fn graphs_are_deep_copies(
+        node1: Option<Rc<RefCell<Node>>>,
+        node2: Option<Rc<RefCell<Node>>>,
+    ) -> bool {
+        if node1.is_none() || node2.is_none() {
+            return node1.is_none() && node2.is_none();
+        }
+
+        let node1 = node1.unwrap();
+        let node2 = node2.unwrap();
+
+        // Use a HashSet to track visited nodes and prevent infinite loops
+        let mut visited = HashSet::new();
+        let mut stack = vec![(node1.clone(), node2.clone())];
+
+        while let Some((n1, n2)) = stack.pop() {
+            if Rc::ptr_eq(&n1, &n2) {
+                // If the Rc pointers are the same, it's not a deep copy
+                return false;
+            }
+            if n1.borrow().val != n2.borrow().val {
+                return false;
+            }
+            if !visited.insert(n1.borrow().val) {
+                continue;
+            }
+
+            // Check that the neighbors' lengths match
+            if n1.borrow().neighbors.len() != n2.borrow().neighbors.len() {
+                return false;
+            }
+
+            // Push neighbors onto the stack for further comparison
+            for (nb1, nb2) in n1
+                .borrow()
+                .neighbors
+                .iter()
+                .zip(n2.borrow().neighbors.iter())
+            {
+                stack.push((nb1.clone(), nb2.clone()));
+            }
+        }
+
+        true
+    }
+
+    #[test]
+    fn test_1() {
+        let original_graph = build_graph(vec![vec![2, 4], vec![1, 3], vec![2, 4], vec![1, 3]]);
+        let cloned_graph = CloneGraph::clone_graph(original_graph.clone());
+        assert!(graphs_are_deep_copies(original_graph, cloned_graph));
+    }
+    #[test]
+    fn test_2() {
+        let original_graph = build_graph(vec![vec![]]);
+        let cloned_graph = CloneGraph::clone_graph(original_graph.clone());
+        assert!(graphs_are_deep_copies(original_graph, cloned_graph));
+    }
+    #[test]
+    fn test_3() {
+        let original_graph = build_graph(vec![]);
+        let cloned_graph = CloneGraph::clone_graph(original_graph.clone());
+        assert!(graphs_are_deep_copies(original_graph, cloned_graph));
+    }
+
+    #[test]
+    fn test_4() {
+        let original_graph = build_graph(vec![
+            vec![2, 5],
+            vec![1, 3],
+            vec![2, 4],
+            vec![3, 5],
+            vec![1, 4],
+        ]);
+        let cloned_graph = CloneGraph::clone_graph(original_graph.clone());
+        assert!(graphs_are_deep_copies(original_graph, cloned_graph));
+    }
+}

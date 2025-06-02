@@ -1,4 +1,4 @@
-//0ms
+//12ms
 
 
 
@@ -19,51 +19,23 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-const auto _ = std::cin.tie(nullptr) -> sync_with_stdio(false);
- 
-#define LC_HACK
-#ifdef LC_HACK
-const auto __ = []() {
-    struct ___ {
-        static void _() { std::ofstream("display_runtime.txt") << 0 << '\n'; }
-    };
-    std::atexit(&___::_);
-    return 0;
-}();
-#endif
+//Upvote and Comment
 
 class Solution {
 public:
     Node* connect(Node* root) {
-        if (root == nullptr)
-            return root;
-
-        queue<Node*> q;
-
-        q.push(root);
-        root->next = nullptr;
-
-        while (!q.empty()){
-            int n = q.size();
-            Node* link = nullptr;
-
-            for (int i = 0; i < n; ++i){
-                Node* tmp = q.front();
-
-                q.pop();
-
-                if (link)
-                    link->next = tmp;    
-                link = tmp;
-                tmp->next = nullptr;
-
-                if (tmp->left)
-                    q.push(tmp->left);
-                if (tmp->right)
-                    q.push(tmp->right);
-
+        //Initialize pointers
+        Node *prev = root, *curr;
+        while (prev) {
+            curr = prev;
+            while (curr && curr->left) { 
+                //connects the left subtree of same level with right subtree of that same level 
+                curr->left->next = curr->right;
+                //connect the rightmost node of a level to the leftmost node of the next level.
+                if (curr -> next) curr->right->next = curr->next->left;
+                curr = curr->next;
             }
-
+            prev = prev -> left;
         }
         return root;
     }

@@ -44,4 +44,85 @@ public ListNode insertionSortList(ListNode head) {
 
 
 
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if(head==null || head.next==null)return head;
+        ListNode prv = null;
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast!=null && fast.next!=null){
+            prv = slow;
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        prv.next=null;
+        ListNode l1 = insertionSortList(head);
+        ListNode l2 = insertionSortList(slow);
+        return megreList(l1,l2);
+    }
+    private ListNode megreList(ListNode head1,ListNode head2){
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while(head1!=null && head2!=null){
+            if(head1.val<head2.val){
+                curr.next = head1;
+                head1=head1.next;
+            }
+            else{
+                curr.next = head2;
+                head2=head2.next;
+            }
+            curr=curr.next;
+
+        }
+        if(head1!=null){
+            curr.next = head1;
+            
+        }
+        if(head2!=null){
+            curr.next=head2;
+        }
+        return dummy.next;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

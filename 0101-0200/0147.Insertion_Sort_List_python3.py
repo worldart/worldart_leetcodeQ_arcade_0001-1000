@@ -66,3 +66,35 @@ class Solution:
             else:
                 l = mid + 1
         dq.insert(l, node)
+
+
+
+
+
+
+#25ms
+
+
+
+
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def insertionSortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+
+        dummy = current = ListNode(0)
+        while head:
+            while current.next and current.next.val < head.val:
+                current = current.next
+            
+            current.next, head.next, head = head, current.next, head.next 
+
+            if head and current.val > head.val:
+                current = dummy
+        
+        return dummy.next

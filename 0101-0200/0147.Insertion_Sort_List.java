@@ -139,13 +139,72 @@ class Solution {
 
 
 
+//1ms
 
 
 
 
 
 
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode merge(ListNode a, ListNode b){
+        ListNode dummy = new ListNode(-1);
+        ListNode t = dummy;
 
+        while (a != null && b != null) {
+            if (a.val <= b.val) {
+                t.next = a;
+                a = a.next;
+            } else {
+                t.next = b;
+                b = b.next;
+            }
+            t = t.next;
+        }
+
+        if (a != null) t.next = a;
+        else t.next = b;
+
+        return dummy.next;
+    }
+
+    public ListNode mergesort(ListNode h) {
+        if (h == null || h.next == null) return h;
+
+        // Split list in two halves using slow-fast pointers
+        ListNode slow = h, fast = h, prev = null;
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Break the list into two parts
+        prev.next = null;
+
+        ListNode left = mergesort(h);
+        ListNode right = mergesort(slow);
+
+        return merge(left, right); // ✔️ return the merged sorted list
+    }
+
+    // public ListNode sortList(ListNode head) {
+    //     return mergesort(head); // ✔️ return the sorted list
+    // }
+    public ListNode insertionSortList(ListNode head) {
+        return mergesort(head);
+    }
+}
 
 
 

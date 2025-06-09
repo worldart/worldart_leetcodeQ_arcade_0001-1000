@@ -46,3 +46,48 @@ var insertionSortList = function (head) {
 
 
 //
+
+
+
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+
+var insertionSortList = function(head) {
+    const extracted = extract(head).sort((a,b) => a - b)
+
+    const result = new ListNode()
+
+    let curr = result
+
+    for (const v of extracted) {
+        curr.next = new ListNode(v)
+        curr = curr.next
+    }
+
+    return result.next
+};
+
+const extract = (node) => {
+    const result = []
+    let curr = node
+    while (curr) {
+        result.push(curr.val)
+        curr = curr.next
+    }
+    return result
+}

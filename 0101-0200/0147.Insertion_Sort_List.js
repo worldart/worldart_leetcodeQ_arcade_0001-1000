@@ -40,3 +40,9 @@ var insertionSortList = function (head) {
     }
     return bucket.next;
 };
+
+
+
+
+
+//

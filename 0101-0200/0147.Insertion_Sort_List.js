@@ -45,7 +45,7 @@ var insertionSortList = function (head) {
 
 
 
-//
+//3ms
 
 
 
@@ -91,3 +91,18 @@ const extract = (node) => {
     }
     return result
 }
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+

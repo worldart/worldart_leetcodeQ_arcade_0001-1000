@@ -104,5 +104,37 @@ const extract = (node) => {
 
 
 
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
 
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+
+ 
+var insertionSortList = function (head) {
+	const values = [];
+	let node = head;
+	while (node) {
+		values.push(node.val);
+		node = node.next;
+	}
+	values.sort((a, b) => a - b);
+	node = head;
+	for (const value of values) {
+		node.val = value;
+		node = node.next;
+	}
+	return head;
+};
 

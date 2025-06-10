@@ -42,3 +42,60 @@ class Solution {
         return dummy.next;
     }
 }
+
+
+
+
+//2ms
+
+
+
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    private void quickSort(ListNode head, ListNode end) {
+        if (head.next == null || head.next.next == null || head.next == end || head.next.next == end) {
+            return;
+        }
+
+        ListNode mid = head.next;
+        ListNode prev = mid;
+        boolean isSorted = true;
+        while (prev.next != end) {
+            isSorted = isSorted && (prev.val <= prev.next.val);
+            if (prev.next.val < mid.val) {
+                ListNode node = prev.next;
+                prev.next = prev.next.next;
+                node.next = head.next;
+                head.next = node;
+            } else {
+                prev = prev.next;
+            }
+        }
+
+        if (isSorted) {
+            return;
+        }
+        quickSort(head, mid);
+        quickSort(mid, end);
+    }
+
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode node = new ListNode(0, head);
+        quickSort(node, null);
+        return node.next;
+    }
+}

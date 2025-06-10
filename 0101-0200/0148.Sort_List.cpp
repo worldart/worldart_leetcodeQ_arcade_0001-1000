@@ -14,40 +14,48 @@
  * };
  */
 
+#include <iostream>
+using namespace std;
+//takesoumen collection
 class Solution {
 public:
-
-   ListNode* sortList(ListNode* head, ListNode* tail = nullptr)
-  {
-    if (head != tail) {
-      // Use head node as the pivot node
-      // Everything in the _smaller_ list will be less than _head_
-      // and everything appearing after _head_ in the list is greater or equal
-      ListNode* smaller;
-      ListNode** smaller_next = &smaller;
-      for (ListNode** prev = &head->next; *prev != tail; ) {
-        if (head->val > (**prev).val) {
-          *smaller_next = *prev;
-          smaller_next = &((**smaller_next).next);
-
-          // Remove smaller node from original list
-          *prev = (**prev).next;
-        } else {
-          // Correct position, skip over
-          prev = &((**prev).next);
+    ListNode* sortList(ListNode* head) {
+        if (!head || !head->next) return head;
+        
+        // Find the middle using slow and fast pointers
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
-      }
-
-      // Connect the end of smaller list to the head (which is the partition node)
-      // We now have. [smaller list...] -> head -> [larger list]
-      *smaller_next = head;
-
-      // Continue to sort everything after head
-      head->next = sortList(head->next, tail);
-
-      // Sort everything upto head
-      head = sortList(smaller, head);
+        
+        ListNode* mid = slow->next;
+        slow->next = nullptr;
+        
+        // Recursively split and merge
+        ListNode* left = sortList(head);
+        ListNode* right = sortList(mid);
+        
+        return merge(left, right);
     }
-    return head;
-  }
+    
+    ListNode* merge(ListNode* l1, ListNode* l2) {
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+        
+        while (l1 && l2) {
+            if (l1->val < l2->val) {
+                tail->next = l1;
+                l1 = l1->next;
+            } else {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+        
+        tail->next = l1 ? l1 : l2;
+        return dummy.next;
+    }
 };

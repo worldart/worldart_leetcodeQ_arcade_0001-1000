@@ -94,4 +94,108 @@ impl Solution {
 
 
 
+//2ms
+
+
+
+
+
+
+
+// Definition for singly-linked list.
+// #[derive(PartialEq, Eq, Clone, Debug)]
+// pub struct ListNode {
+//   pub val: i32,
+//   pub next: Option<Box<ListNode>>
+// }
 //
+// impl ListNode {
+//   #[inline]
+//   fn new(val: i32) -> Self {
+//     ListNode {
+//       next: None,
+//       val
+//     }
+//   }
+// }
+impl Solution {
+    pub fn sort_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut head = head;
+        let mut node = head.as_ref();
+
+        let mut values = vec![];
+
+        while let Some(node_some) = node {
+            values.push(node_some.val);
+            node = node_some.next.as_ref();
+        }
+
+        values.sort_unstable();
+
+        let mut node = head.as_mut();
+
+        for value in values {
+            let node_some = node.unwrap();
+            node_some.val = value;
+            node = node_some.next.as_mut();
+        }
+
+        head
+    }
+}
+
+
+
+
+
+
+
+
+
+//3ms
+
+
+
+
+
+
+
+
+
+// Definition for singly-linked list.
+// #[derive(PartialEq, Eq, Clone, Debug)]
+// pub struct ListNode {
+//   pub val: i32,
+//   pub next: Option<Box<ListNode>>
+// }
+// 
+// impl ListNode {
+//   #[inline]
+//   fn new(val: i32) -> Self {
+//     ListNode {
+//       next: None,
+//       val
+//     }
+//   }
+// }
+impl Solution {
+    pub fn sort_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut node = head;
+        let mut res = vec![] ;
+        
+        while let Some(curr) = node { 
+            res.push(curr.val);
+            node = curr.next ; 
+        }
+        res.sort(); 
+
+        let mut head = Box::new(ListNode::new(0)) ;
+        let mut p = &mut head;
+
+        for i in 0..res.len() {
+            p.next = Some(Box::new(ListNode::new(res[i]))); 
+            p = p.next.as_mut().unwrap() ; 
+        }
+        head.next 
+    }
+}

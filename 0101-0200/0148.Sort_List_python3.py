@@ -49,6 +49,43 @@ class Solution:
 
 
 
+#12ms
+
+
+
+
+
+
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return head
+        temp = []
+        cur = head
+        while cur:
+            temp.append(cur.val)
+            cur = cur.next
+        temp.sort()
+        cur = head
+        for val in temp:
+            cur.val = val
+            cur = cur.next
+        return head
+
+
+
+
+
+
+
+
 #
 
 

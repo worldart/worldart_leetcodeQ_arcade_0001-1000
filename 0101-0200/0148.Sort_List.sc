@@ -145,7 +145,50 @@ object Solution {
 
 
 
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+object Solution {
+  def sortList(head: ListNode): ListNode = {
+    if (head == null || head.next == null) return head
+    var slow = head
+    var fast = head.next
+    while (fast != null && fast.next != null) {
+      slow = slow.next
+      fast = fast.next.next
+    }
+    val mid = slow.next
+    slow.next = null
+    val left = sortList(head)
+    val right = sortList(mid)
+    merge(left, right)
+  }
 
+  private def merge(l1: ListNode, l2: ListNode): ListNode = {
+    val dummy = new ListNode(0)
+    var tail = dummy
+    var node1: ListNode = l1
+    var node2: ListNode = l2
+    while (node1 != null && node2 != null) {
+      if (node1.x < node2.x) {
+        tail.next = node1
+        node1 = node1.next
+      } else {
+        tail.next = node2
+        node2 = node2.next
+      }
+      tail = tail.next
+    }
+    tail.next =
+      if (node1 != null) node1
+      else node2
+    dummy.next
+  }
+}
 
 
 

@@ -1,4 +1,4 @@
-//401ms
+#401ms
 
 
 
@@ -11,7 +11,7 @@ WHERE EMP.managerId=MGR.id AND EMP.salary>MGR.salary
 
 
 
-//389ms
+#389ms
 
 
 

@@ -1,0 +1,22 @@
+#394ms
+
+
+
+
+
+SELECT email
+FROM Person
+GROUP BY 1
+HAVING COUNT(1) > 1;
+
+
+
+
+
+#400ms
+
+
+
+
+
+SELECT EMAIL FROM PERSON GROUP BY EMAIL HAVING COUNT(*) >= 2

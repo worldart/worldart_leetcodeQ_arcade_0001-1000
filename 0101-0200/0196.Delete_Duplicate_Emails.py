@@ -1,4 +1,4 @@
-//263ms
+#263ms
 
 
 
@@ -17,7 +17,7 @@ def delete_duplicate_emails(person: pd.DataFrame) -> None:
 
 
 
-//262ms
+#262ms
 
 
 
